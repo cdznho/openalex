@@ -9,7 +9,7 @@ from typing import Any, Dict, List
 import pandas as pd
 import streamlit as st
 
-from mcp_openalex_server import (
+from openalex_core import (
     OpenAlexClient,
     REGION_COUNTRY_CODES,
     REGION_LABELS,
@@ -111,6 +111,21 @@ def fetch_quantum_concept_yearly_breakdown(
     return pd.DataFrame(rows)
 
 
+@st.cache_data(ttl=24 * 60 * 60)
+def fetch_quantum_concepts() -> pd.DataFrame:
+    client = OpenAlexClient()
+    concepts = client.resolve_quantum_concepts_broad()
+    rows: List[Dict[str, Any]] = []
+    for concept in concepts:
+        rows.append(
+            {
+                "Concept ID": concept["id"],
+                "Concept": concept.get("display_name", concept["id"]),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def main() -> None:
     st.set_page_config(page_title="OpenAlex Publication Stats", layout="wide")
     st.title("OpenAlex Publication Stats")
@@ -163,6 +178,10 @@ def main() -> None:
     st.dataframe(pivot, use_container_width=True)
 
     if TOPIC_OPTIONS[topic] == "quantum_broad":
+        concept_list_df = fetch_quantum_concepts()
+        with st.expander("Active quantum concept codes", expanded=False):
+            st.dataframe(concept_list_df, use_container_width=True, hide_index=True)
+
         st.subheader("Quantum concept breakdown by year")
         with st.spinner("Fetching per-concept yearly counts..."):
             concept_df = fetch_quantum_concept_yearly_breakdown(

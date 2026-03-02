@@ -8,9 +8,9 @@ import json
 import sys
 from typing import Any, Dict
 
-from mcp_openalex_server import (
-    quantum_publication_stats,
-    quantum_publication_stats_custom_range,
+from openalex_core import (
+    quantum_publication_stats_custom_range_data,
+    quantum_publication_stats_data,
 )
 
 
@@ -107,9 +107,9 @@ def main() -> int:
 
     try:
         if has_custom_start and has_custom_end:
-            payload = quantum_publication_stats_custom_range(args.start_year, args.end_year)
+            payload = quantum_publication_stats_custom_range_data(args.start_year, args.end_year)
         else:
-            payload = quantum_publication_stats(
+            payload = quantum_publication_stats_data(
                 history_years=args.history_years,
                 include_previous_years=not args.last_year_only,
             )

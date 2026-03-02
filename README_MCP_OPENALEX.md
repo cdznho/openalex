@@ -16,9 +16,13 @@ This server exposes MCP tools that fetch publication counts from OpenAlex for:
 ## Setup
 1. Install dependencies:
    ```bash
-   pip install mcp requests streamlit pandas
+   pip install requests streamlit pandas
    ```
-2. Optional environment variables:
+2. If you want to run the MCP server too:
+   ```bash
+   pip install mcp
+   ```
+3. Optional environment variables:
    - `OPENALEX_MAILTO=you@example.com` (recommended for OpenAlex polite pool)
    - `OPENALEX_QUANTUM_CONCEPT_ID=C123456789` (override auto-resolved concept)
    - `OPENALEX_QUANTUM_CONCEPT_IDS=C1,C2,C3` (override broad concept set)
@@ -48,6 +52,7 @@ Dashboard selectors:
 
 Dashboard outputs:
 - Region yearly trend and totals
+- Active quantum concept code list (Concept ID + Concept name)
 - Quantum concept breakdown table (Concept ID + Concept name + per-year counts) when the quantum topic is selected
 
 ## Notes on counting
